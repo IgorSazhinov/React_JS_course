@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import PostForm from './components/PostForm'
 
 import PostList from './components/PostList'
@@ -16,19 +16,33 @@ export default function App() {
   const [salectedSort, setSalectedSort] = useState('')
   const [searchQuery, setSearchQuery] = useState('')
 
+  // сортирую массив по полученному типу сортировки. Если тип сортировки не задан, то возвращаю список постов.
+  const sortedPosts = useMemo(() => {
+    console.log('Отработала функция сортировки');
+    if (salectedSort) {
+      return [...posts].sort((a, b) => a[salectedSort].localeCompare(b[salectedSort]))
+    }
+    return posts
+  }, [posts, salectedSort])
+
+  const sortedAndSearchedPosts = useMemo(() => {
+    return sortedPosts.filter(post => post.title.toLowerCase().includes(searchQuery.toLowerCase()))
+  }, [searchQuery, sortedPosts])
+
+  // создаю пост. данные получаю из PostForm. разворачиваю в существующий масссив
   const createPost = (newPost) => {
     setPosts([...posts, newPost])
   }
 
+  // удаляю пост. данные получаю из PostList. получаю новый массив без записи полученного поста
   const removePost = (post) => {
     setPosts(posts.filter(p => p.id !== post.id))
   } 
 
+  // получаю тип сортировки
   const sortPosts = (sort) => {
     setSalectedSort(sort)
-    setPosts([...posts].sort((a, b) => a[sort].localeCompare(b[sort])))
   }
-
 
   return (
     <div className="App">
@@ -55,7 +69,7 @@ export default function App() {
 
 
       {posts.length
-        ? <PostList remove={removePost} posts={posts}>Список постов</PostList>
+        ? <PostList remove={removePost} posts={sortedAndSearchedPosts}>Список постов</PostList>
         : <h1 style={{textAlign: 'center'}}>Посты не найдены</h1>
       }
     </div>
