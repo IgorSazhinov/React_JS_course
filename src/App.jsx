@@ -25,8 +25,15 @@ export default function App() {
     return posts
   }, [posts, salectedSort])
 
+  // поиск по названию или описанию. сравниваю каждый пост с введенным значением в поле MyInput
   const sortedAndSearchedPosts = useMemo(() => {
-    return sortedPosts.filter(post => post.title.toLowerCase().includes(searchQuery.toLowerCase()))
+    const endSortedPost = []
+    sortedPosts.forEach(post => {
+      if (post.title.toLowerCase().includes(searchQuery.toLowerCase()) || post.body.toLowerCase().includes(searchQuery.toLowerCase())) {
+        endSortedPost.push(post)
+      } 
+    })
+    return endSortedPost
   }, [searchQuery, sortedPosts])
 
   // создаю пост. данные получаю из PostForm. разворачиваю в существующий масссив
@@ -52,15 +59,15 @@ export default function App() {
       
       <div>
         <MyInput 
-          placeholder='Поиск...'
+          placeholder='Поиск по названию и описанию...'
           value={searchQuery}
           onChange={e => setSearchQuery(e.target.value)}
         />
         <MySelect 
           defaultValue = 'Сортировка по' 
           options = {[
-            {value: 'title', name: 'Названию'},
-            {value: 'body', name: 'Описанию'}
+            {value: 'title', name: 'названию'},
+            {value: 'body', name: 'описанию'}
           ]}
           value = {salectedSort}
           onChange = {sortPosts}
@@ -68,7 +75,7 @@ export default function App() {
       </div>
 
 
-      {posts.length
+      {sortedAndSearchedPosts.length
         ? <PostList remove={removePost} posts={sortedAndSearchedPosts}>Список постов</PostList>
         : <h1 style={{textAlign: 'center'}}>Посты не найдены</h1>
       }
