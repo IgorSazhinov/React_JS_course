@@ -4,6 +4,15 @@ import PostItem from "./PostItem";
 
 export default function PostList({posts, children, remove}) {
 
+    // если постов нет выводим заглушку
+    if (!posts.length) {
+        return (
+            <h1 style={{textAlign: 'center'}}>
+                Посты не найдены
+            </h1>
+        )
+    }
+
     return (
         <>        
             <h1 style={{textAlign: 'center'}}>
