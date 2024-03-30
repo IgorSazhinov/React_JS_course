@@ -3,6 +3,7 @@ import PostItem from "./PostItem";
 
 
 export default function PostList({posts, children, remove}) {
+    
     // если постов нет — выводим заглушку
     if (!posts.length) {
         return (
