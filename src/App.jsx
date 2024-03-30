@@ -48,11 +48,11 @@ export default function App() {
 
   return (
     <div className="App">
-      <MyButton style={{marginTop: '25px'}} onClick={() => setModal(true)}>
+      <MyButton style={{marginTop: '15px'}} onClick={() => setModal(true)}>
         Создать пост
       </MyButton>
       <MyModal visible={modal} setVisible={setModal}>
-        <PostForm create={createPost} />
+        <PostForm create={createPost} visible={modal}/>
       </MyModal>
       <PostFilter filter={filter} setFilter={setFilter} />
       <PostList remove={removePost} posts={sortedAndSearchedPosts}>Список постов</PostList>
