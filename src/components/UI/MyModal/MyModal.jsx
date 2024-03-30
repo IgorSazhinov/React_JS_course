@@ -1,9 +1,9 @@
 import cl from './MyModal.module.css'
 
 export default function MyModal({children, visible, setVisible}) {
-    
     const rootClasses = [cl.myModal]
     
+    // проверка для активации модального окна
     if (visible) {
         rootClasses.push(cl.active)
     }

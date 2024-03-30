@@ -7,14 +7,12 @@ export default function PostForm({create}) {
     const [post, setPost] = useState({title: '', body: ''})
 
     const addNewPost = (e) => {
+        // убираю обновление страницы при создании нового поста
         e.preventDefault()
-    
         const newPost = {
             ...post, id: Date.now()
         }
-
         create(newPost)
-
         setPost({
           title: '',
           body: ''
@@ -27,7 +25,8 @@ export default function PostForm({create}) {
                 value={post.title} 
                 onChange={ e => setPost({...post, title: e.target.value})}
                 type='text' 
-                placeholder='Название поста' 
+                placeholder='Название поста'
+                
             />
             <MyInput
                 value={post.body} 

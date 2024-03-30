@@ -51,7 +51,6 @@ export default function App() {
       <MyButton style={{marginTop: '25px'}} onClick={() => setModal(true)}>
         Создать пост
       </MyButton>
-      <hr style={{margin: '15px 0'}}/>
       <MyModal visible={modal} setVisible={setModal}>
         <PostForm create={createPost} />
       </MyModal>
