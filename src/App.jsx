@@ -6,17 +6,27 @@ import './styles/App.css'
 import MyModal from './components/UI/MyModal/MyModal'
 import MyButton from './components/UI/button/MyButton'
 import usePost from './hooks/usePosts'
+import { useEffect } from 'react'
+import PostService from './API/PostService'
 
 export default function App() {
   const [posts, setPosts] = useState([
-    {id: 1, title: 'JavaScrypt', body: ' 1 JavaScript - это язык программирования'},
-    {id: 2, title: 'Python', body: ' 4 Python - это язык программирования'},
-    {id: 3, title: 'C++', body: ' 3 C++ - это язык программирования'}
+    // {id: 1, title: 'JavaScrypt', body: ' 1 JavaScript - это язык программирования'},
+    // {id: 2, title: 'Python', body: ' 4 Python - это язык программирования'},
+    // {id: 3, title: 'C++', body: ' 3 C++ - это язык программирования'}
   ])
   const [modal, setModal] = useState(false)
   const [filter, setFilter] = useState({sort: '', query: ''})
-
   const sortedAndSearchedPosts = usePost(posts, filter.sort, filter.query)
+
+  useEffect( () => {
+    fetchPosts()
+  }, [])
+
+  async function fetchPosts() {
+    const posts = await PostService.getAll()
+    setPosts(posts)
+  }
 
   // создаю пост. данные получаю из PostForm. разворачиваю в существующий масссив
   const createPost = (newPost) => {
