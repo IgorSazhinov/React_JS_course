@@ -5,7 +5,7 @@ import PostList from './components/PostList'
 import './styles/App.css'
 import MyModal from './components/UI/MyModal/MyModal'
 import MyButton from './components/UI/button/MyButton'
-
+import usePost from './hooks/usePosts'
 
 export default function App() {
   const [posts, setPosts] = useState([
@@ -16,24 +16,7 @@ export default function App() {
   const [modal, setModal] = useState(false)
   const [filter, setFilter] = useState({sort: '', query: ''})
 
-  // сортирую массив по полученному типу сортировки. Если тип сортировки не задан, то возвращаю список постов.
-  const sortedPosts = useMemo(() => {
-    if (filter.sort) {
-      return [...posts].sort((a, b) => a[filter.sort].localeCompare(b[filter.sort]))
-    }
-    return posts
-  }, [posts, filter.sort])
-
-  // поиск по названию или описанию. сравниваю каждый пост с введенным значением в поле MyInput
-  const sortedAndSearchedPosts = useMemo(() => {
-    const endSortedPost = []
-    sortedPosts.forEach(post => {
-      if (post.title.toLowerCase().includes(filter.query.toLowerCase()) || post.body.toLowerCase().includes(filter.query.toLowerCase())) {
-        endSortedPost.push(post)
-      } 
-    })
-    return endSortedPost
-  }, [filter.query, sortedPosts])
+  const sortedAndSearchedPosts = usePost(posts, filter.sort, filter.query)
 
   // создаю пост. данные получаю из PostForm. разворачиваю в существующий масссив
   const createPost = (newPost) => {
@@ -43,8 +26,8 @@ export default function App() {
 
   // удаляю пост. данные получаю из PostList. получаю новый массив без записи полученного поста
   const removePost = (post) => {
-    setPosts(posts.filter(p => p.id !== post.id))
-  } 
+      setPosts(posts.filter(p => p.id !== post.id))
+  }
 
   return (
     <div className="App">
