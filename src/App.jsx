@@ -9,24 +9,23 @@ import usePost from './hooks/usePosts'
 import { useEffect } from 'react'
 import PostService from './API/PostService'
 import Loader from './components/UI/Loader/Loader'
+import { UseFetching } from './hooks/useFetching'
 
 export default function App() {
   const [posts, setPosts] = useState([])
   const [modal, setModal] = useState(false)
   const [filter, setFilter] = useState({sort: '', query: ''})
   const sortedAndSearchedPosts = usePost(posts, filter.sort, filter.query)
-  const [isPostLoading, setIsPostLoading] = useState(false)
+  
+  
+  const [fetchPosts, isPostLoading, postError] = UseFetching( async () => {
+    const posts = await PostService.getAll()
+    setPosts(posts)
+  })
 
   useEffect(() => {
     fetchPosts()
   }, [])
-
-  async function fetchPosts() {
-    setIsPostLoading(true)
-    const posts = await PostService.getAll()
-    setPosts(posts)
-    setIsPostLoading(false)
-  }
 
   // создаю пост. данные получаю из PostForm. разворачиваю в существующий масссив
   const createPost = (newPost) => {
@@ -48,6 +47,10 @@ export default function App() {
         <PostForm create={createPost} visible={modal}/>
       </MyModal>
       <PostFilter filter={filter} setFilter={setFilter} />
+
+      {postError &&
+        <h1>Произошла ошибка {postError}</h1>
+      } 
 
       {isPostLoading
         ? <Loader />
