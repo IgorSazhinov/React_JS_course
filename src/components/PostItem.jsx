@@ -5,13 +5,13 @@ export default function PostItem({post, number, remove}) {
 
     return (
         <div className="post">
-            <div className="post__content">
+            <div className="post__content" style={{marginRight: '5px'}}>
                 <strong>{number}. {post.title}</strong>
                 <div>
                     {post.body}
                 </div>
             </div>
-            <div className="post__btns">
+            <div className="post__btns" style={{flexShrink: '0'}}>
                 <MyButton onClick={() => remove(post)}>Удалить пост</MyButton>
             </div>
         </div>
