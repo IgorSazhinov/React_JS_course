@@ -10,17 +10,30 @@ import { useEffect } from 'react'
 import PostService from './API/PostService'
 import Loader from './components/UI/Loader/Loader'
 import { UseFetching } from './hooks/useFetching'
+import { getPageCount } from './utils/pages'
 
 export default function App() {
   const [posts, setPosts] = useState([])
   const [modal, setModal] = useState(false)
   const [filter, setFilter] = useState({sort: '', query: ''})
+  const [totalPages, setTotalPages] = useState(0)
+  const [limit, setLimit] = useState(10)
+  const [page, setPage] = useState(1)
   const sortedAndSearchedPosts = usePost(posts, filter.sort, filter.query)
-  
-  
+
+  let pagesArray = []
+  for (let i = 0; i < totalPages; i++) {
+    pagesArray.push(i + 1)
+  }
+
+  console.log(pagesArray);
+
+
   const [fetchPosts, isPostLoading, postError] = UseFetching( async () => {
-    const posts = await PostService.getAll()
-    setPosts(posts)
+    const response = await PostService.getAll(limit, page)
+    const totalCount = response.headers['x-total-count']
+    setPosts(response.data)
+    setTotalPages(getPageCount(totalCount, limit))
   })
 
   useEffect(() => {
