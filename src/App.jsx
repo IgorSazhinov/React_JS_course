@@ -10,7 +10,7 @@ import { useEffect } from 'react'
 import PostService from './API/PostService'
 import Loader from './components/UI/Loader/Loader'
 import { UseFetching } from './hooks/useFetching'
-import { getPageCount } from './utils/pages'
+import { getPageArray, getPageCount } from './utils/pages'
 
 export default function App() {
   const [posts, setPosts] = useState([])
@@ -21,12 +21,10 @@ export default function App() {
   const [page, setPage] = useState(1)
   const sortedAndSearchedPosts = usePost(posts, filter.sort, filter.query)
 
-  let pagesArray = []
-  for (let i = 0; i < totalPages; i++) {
-    pagesArray.push(i + 1)
-  }
 
-  console.log(pagesArray);
+  // ДЗ: добавить мемо. Лучше сделать отдельный хук usePagination
+  let pagesArray = getPageArray(totalPages)
+  
 
 
   const [fetchPosts, isPostLoading, postError] = UseFetching( async () => {
@@ -38,7 +36,7 @@ export default function App() {
 
   useEffect(() => {
     fetchPosts()
-  }, [])
+  }, [page])
 
   // создаю пост. данные получаю из PostForm. разворачиваю в существующий масссив
   const createPost = (newPost) => {
@@ -49,6 +47,11 @@ export default function App() {
   // удаляю пост. данные получаю из PostList. получаю новый массив без записи полученного поста
   const removePost = (post) => {
       setPosts(posts.filter(p => p.id !== post.id))
+  }
+
+  const changePage = (page) => {
+    setPage(page)
+  
   }
 
   return (
@@ -69,7 +72,18 @@ export default function App() {
         ? <Loader />
         : <PostList remove={removePost} posts={sortedAndSearchedPosts}>Список постов</PostList>
       }
-      
+
+      <div className='page__wraper'>
+        {pagesArray.map( p =>
+          <span
+            className={page === p ? 'page__current' : 'page'}
+            key={p}
+            onClick={() => changePage(p)}
+            >
+              {p}
+          </span>
+        )}
+      </div>
     </div>
   )
 }

@@ -36,3 +36,36 @@
     transform: translateX(-350px);
     transition: all 500ms ease-in;
   }
+
+
+.page__wraper {
+  margin-top: 30px;
+  display: flex;
+  border: 1px solid teal;
+  justify-content: space-between;
+}
+
+.page {
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  cursor: pointer;
+  align-items: center;
+  margin: 10px;
+  text-align: center;
+  color: teal;
+  border: 1px solid teal;
+}
+
+.page__current {
+  width: 40px;
+  height: 40px;
+  padding: 10px;
+  cursor: pointer;
+  align-items: center;
+  margin: 10px;
+  text-align: center;
+  color: teal;
+  border: 2px solid orange;
+  font-weight: bold;
+}

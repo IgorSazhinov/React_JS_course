@@ -1,12 +1,12 @@
 import MyButton from "./UI/button/MyButton";
 
 
-export default function PostItem({post, number, remove}) {
+export default function PostItem({post, remove}) {
 
     return (
         <div className="post">
             <div className="post__content" style={{marginRight: '5px'}}>
-                <strong>{number}. {post.title}</strong>
+                <strong>{post.id}. {post.title}</strong>
                 <div>
                     {post.body}
                 </div>
