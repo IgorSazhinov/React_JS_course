@@ -10,7 +10,8 @@ import { useEffect } from 'react'
 import PostService from './API/PostService'
 import Loader from './components/UI/Loader/Loader'
 import { UseFetching } from './hooks/useFetching'
-import { getPageArray, getPageCount } from './utils/pages'
+import { getPageCount } from './utils/pages'
+import Pagination from './components/UI/pagination/Pagination'
 
 export default function App() {
   const [posts, setPosts] = useState([])
@@ -21,12 +22,7 @@ export default function App() {
   const [page, setPage] = useState(1)
   const sortedAndSearchedPosts = usePost(posts, filter.sort, filter.query)
 
-
-  // ДЗ: добавить мемо. Лучше сделать отдельный хук usePagination
-  let pagesArray = getPageArray(totalPages)
   
-
-
   const [fetchPosts, isPostLoading, postError] = UseFetching( async () => {
     const response = await PostService.getAll(limit, page)
     const totalCount = response.headers['x-total-count']
@@ -51,7 +47,6 @@ export default function App() {
 
   const changePage = (page) => {
     setPage(page)
-  
   }
 
   return (
@@ -72,18 +67,7 @@ export default function App() {
         ? <Loader />
         : <PostList remove={removePost} posts={sortedAndSearchedPosts}>Список постов</PostList>
       }
-
-      <div className='page__wraper'>
-        {pagesArray.map( p =>
-          <span
-            className={page === p ? 'page__current' : 'page'}
-            key={p}
-            onClick={() => changePage(p)}
-            >
-              {p}
-          </span>
-        )}
-      </div>
+      <Pagination totalPages={totalPages} changePage={changePage} page={page} />
     </div>
   )
 }
