@@ -13,7 +13,6 @@ export default function App() {
                     <Link to="/posts">Посты</Link>
                 </div>
             </div>
-
             <Routes>
                 <Route path="/about" element={<About />} />
                 <Route path="/posts" element={<Posts />} />
